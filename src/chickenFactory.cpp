@@ -1,14 +1,14 @@
 #include "../include/chickenFactory.h"
 
 int clsChickenFactory::chickenCount = 0;
+int clsChickenFactory::maxChickens = 7;
 
-clsChickenFactory::clsChickenFactory(){
-
+clsChickenFactory::clsChickenFactory()
+{
 }
 
 clsChickenFactory::clsChickenFactory(SDL_Renderer *renderer)
 {
-    isThereNewCheckin = false;
     nextPos.setX(200);
     nextPos.setY(150);
     this->renderer = renderer;
@@ -20,7 +20,7 @@ clsChickenFactory::clsChickenFactory(SDL_Renderer *renderer)
     chickenTex = IMG_LoadTexture(renderer, "img/chicken.png");
 }
 
-clsChicken* clsChickenFactory::chickens()
+clsChicken *clsChickenFactory::chickens()
 {
     return allChickens;
 }
@@ -33,6 +33,11 @@ int clsChickenFactory::getChickenCount()
 void clsChickenFactory::setChickenCount(int newCount)
 {
     chickenCount = newCount;
+}
+
+void clsChickenFactory::decreaseChickenCount()
+{
+    chickenCount--;
 }
 
 int clsChickenFactory::getKillsNum()
@@ -60,28 +65,42 @@ void clsChickenFactory::produceChicken()
     int randomY = minY + (rand() % (maxY - minY + 1));
     nextPos.setX(randomX);
     nextPos.setY(randomY);
-    
-    for(int i = 0; i < maxChickens; ++i){
-        if(! allChickens[i].getIsAlive()){
+
+    for (int i = 0; i < maxChickens; ++i)
+    {
+        if (!allChickens[i].getIsAlive())
+        {
             allChickens[i].setIsAlive(true);
             allChickens[i].setPosition(nextPos);
+            allChickens[i].setTexture(chickenTex);
+            break;  // Only activate one chicken per update
         }
     }
 }
 
 void clsChickenFactory::render()
 {
-    for (clsChicken *chicken : allChickens)
+    for (int i = 0; i < maxChickens; ++i)
     {
-        chicken->render(renderer);
+        if (allChickens[i].getIsAlive())
+        {
+            allChickens[i].render(renderer);
+        }
     }
 }
 
+
+int clsChickenFactory::getMaxChickens()
+{
+    return maxChickens;
+}
+
+void clsChickenFactory::setMaxChickens(int max)
+{
+    maxChickens = max;
+}
+
+
 clsChickenFactory::~clsChickenFactory()
 {
-    for (auto chicken : allChickens)
-    {
-        delete chicken;
-    }
-    allChickens.clear();
 }

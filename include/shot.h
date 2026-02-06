@@ -40,6 +40,7 @@ public:
     void setStartPosition(clsVector pos);
     void setTargetPosition(clsVector pos);
     void setTexture(SDL_Texture *tex);
+    void calculateTrajectory();
 
     void update();
     void render(SDL_Renderer *renderer);

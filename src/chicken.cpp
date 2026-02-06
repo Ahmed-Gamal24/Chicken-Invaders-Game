@@ -11,7 +11,11 @@ clsChicken::clsChicken(clsVector position, float w, float h, SDL_Texture *tex)
 
 clsChicken::clsChicken(){
     isAlive = false;
-    w = 
+    width = 100;
+    height = 100;
+    texture = nullptr;
+    position.setX(0);
+    position.setY(0);
 }
 
 void clsChicken::kill()

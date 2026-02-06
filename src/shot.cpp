@@ -25,8 +25,19 @@ clsShot::clsShot(clsVector sPos, clsVector tPos, float w, float h, SDL_Texture *
 
 clsShot::clsShot()
 {
-    isActive = true;
+    isActive = false;
     speed = 10.0f;
+    width = 30;
+    height = 30;
+    texture = nullptr;
+    angleInRad = 0;
+    angleInDeg = 0;
+    startPosition.setX(0);
+    startPosition.setY(0);
+    targetPosition.setX(0);
+    targetPosition.setY(0);
+    velocity.setX(0);
+    velocity.setY(0);
 }
 
 
@@ -94,6 +105,21 @@ void clsShot::setStartPosition(clsVector pos)
 void clsShot::setTargetPosition(clsVector pos)
 {
     targetPosition = pos;
+    calculateTrajectory();
+}
+
+void clsShot::calculateTrajectory()
+{
+    clsVector delta;
+    delta.setX(targetPosition.getX() - startPosition.getX());
+    delta.setY(targetPosition.getY() - startPosition.getY());
+
+    angleInRad = atan2(delta.getY(), delta.getX());
+
+    velocity.setX(cos(angleInRad) * speed);
+    velocity.setY(sin(angleInRad) * speed);
+
+    angleInDeg = (angleInRad * 180.0 / M_PI) + 90.0;
 }
 
 void clsShot::setTexture(SDL_Texture *tex)

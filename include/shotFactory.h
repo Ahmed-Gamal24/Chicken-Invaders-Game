@@ -15,18 +15,23 @@ private:
     SDL_Renderer *renderer;
     SDL_Texture *shotTex;
 
-    static const int maxShots = 200;
-    clsShot allShots[maxShots];
+    static int maxShots;
+    clsShot allShots[200];
 
     Uint32 lastShotTime;
     Uint32 shotDelay;
 
 public:
     clsShotFactory(SDL_Renderer *renderer);
-    clsShot* shots();
+    clsShot *shots();
     void update();
     void produceShot(float mouseX, float mouseY);
     void render();
+
+    // Static getters and setters for maxShots
+    static int getMaxShots();
+    static void setMaxShots(int max);
+
     ~clsShotFactory();
 };
 

@@ -16,36 +16,31 @@ void clsGameField::update(float mouseX, float mouseY)
     shotFac->update();
 
     // handle the collision
-    auto &shots = shotFac->shots();
-    auto &chickens = chickenFac->chickens();
+    clsShot *shots = shotFac->shots();
+    clsChicken *chickens = chickenFac->chickens();
 
     SDL_Rect shotRect;
     SDL_Rect chickenRect;
-    for (auto itShot = shots.begin(); itShot != shots.end(); )
+    for (int shot = 0; shot < shotFac->getMaxShots(); ++shot)
     {
-        bool shotHit = false;
-        shotRect = (*itShot)->getRect();
-        for (auto itChicken = chickens.begin(); itChicken != chickens.end();)
+        if (!shots[shot].IsActive())
+            continue;
+
+        shotRect = shots[shot].getRect();
+        for (int chicken = 0; chicken < chickenFac->getMaxChickens(); ++chicken)
         {
-            chickenRect = (*itChicken)->getRect();
+            if (!chickens[chicken].getIsAlive())
+                continue;
+
+            chickenRect = chickens[chicken].getRect();
             if (SDL_HasIntersection(&shotRect, &chickenRect))
             {
-                shotHit = true;
                 chickenFac->increaseKillsNum();
-                delete *itChicken;
-                itChicken = chickens.erase(itChicken);          
-                chickenFac->setChickenCount(chickenFac->getChickenCount() - 1);
+                chickenFac->decreaseChickenCount();
+                shots[shot].setActivity(false);
+                chickens[chicken].setIsAlive(false);
                 break;
-            }else{
-                itChicken ++;
             }
-        }
-
-        if(shotHit){
-            delete *itShot;
-            itShot = shots.erase(itShot);
-        }else {
-            itShot++;
         }
     }
 }
