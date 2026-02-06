@@ -9,6 +9,11 @@ clsChicken::clsChicken(clsVector position, float w, float h, SDL_Texture *tex)
     isAlive = true;
 }
 
+clsChicken::clsChicken(){
+    isAlive = false;
+    w = 
+}
+
 void clsChicken::kill()
 {
     isAlive = false;
@@ -23,6 +28,56 @@ SDL_Rect clsChicken::getRect()
     rect.h = (int)height;
 
     return rect;
+}
+
+float clsChicken::getWidth()
+{
+    return width;
+}
+
+float clsChicken::getHeight()
+{
+    return height;
+}
+
+clsVector clsChicken::getPosition()
+{
+    return position;
+}
+
+SDL_Texture *clsChicken::getTexture()
+{
+    return texture;
+}
+
+bool clsChicken::getIsAlive()
+{
+    return isAlive;
+}
+
+void clsChicken::setWidth(float w)
+{
+    width = w;
+}
+
+void clsChicken::setHeight(float h)
+{
+    height = h;
+}
+
+void clsChicken::setPosition(clsVector pos)
+{
+    position = pos;
+}
+
+void clsChicken::setTexture(SDL_Texture *tex)
+{
+    texture = tex;
+}
+
+void clsChicken::setIsAlive(bool alive)
+{
+    isAlive = alive;
 }
 
 void clsChicken::update()

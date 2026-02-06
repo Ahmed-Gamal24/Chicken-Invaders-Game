@@ -8,7 +8,7 @@ clsShotFactory::clsShotFactory(SDL_Renderer *renderer)
     shotTex = IMG_LoadTexture(renderer, "img/shot.png");
 }
 
-list<clsShot *> &clsShotFactory::shots()
+clsShot* clsShotFactory::shots()
 {
     return allShots;
 }
@@ -28,19 +28,15 @@ void clsShotFactory::update()
         }
     }
 
-    for (auto itShot = allShots.begin(); itShot != allShots.end();)
+    for(int i = 0; i < maxShots; ++i)
     {
-        (*itShot)->update();
+        allShots[i].update();
 
-        if ((*itShot)->getPos().getY() < 0)
+        if (allShots[i].getStartPosition().getY() < 0)
         {
-            delete *itShot;
-            itShot = allShots.erase(itShot);
+            allShots[i].setActivity(false);
         }
-        else
-        {
-            itShot++;
-        }
+
     }
 }
 
@@ -48,15 +44,27 @@ void clsShotFactory::produceShot(float mouseX, float mouseY)
 {
     clsVector targetPos = {mouseX, mouseY};
     clsVector startPos = {1000, 1000};
-    clsShot *newShot = new clsShot(startPos, targetPos, 30, 30, shotTex);
-    allShots.push_back(newShot);
+
+    //look for a valid position in allShots pool
+    for(int i = 0; i < maxShots; ++i){
+        if(! allShots[i].IsActive()){
+            allShots[i].setActivity(true);
+            allShots[i].setStartPosition(startPos);
+            allShots[i].setTargetPosition(targetPos);
+            allShots[i].setWidth(30);
+            allShots[i].setHeight(30);
+            allShots[i].setTexture(shotTex);
+        }
+        
+    }
 }
 
 void clsShotFactory::render()
 {
-    for (auto itShot = allShots.begin(); itShot != allShots.end(); ++itShot)
-    {
-        (*itShot)->render(renderer);
+    for(int i = 0; i < maxShots; ++i){
+        if(allShots[i].IsActive()){
+            allShots[i].render(renderer);
+        }
     }
 }
 

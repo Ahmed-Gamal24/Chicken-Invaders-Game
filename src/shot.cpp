@@ -9,6 +9,8 @@ clsShot::clsShot(clsVector sPos, clsVector tPos, float w, float h, SDL_Texture *
     texture = tex;
     speed = 10.0f;
 
+    isActive = true;
+
     clsVector delta;
     delta.setX(targetPosition.getX() - startPosition.getX());
     delta.setY(targetPosition.getY() - startPosition.getY());
@@ -21,10 +23,12 @@ clsShot::clsShot(clsVector sPos, clsVector tPos, float w, float h, SDL_Texture *
     angleInDeg = (angleInRad * 180.0 / M_PI) + 90.0;
 }
 
-clsVector clsShot::getPos()
+clsShot::clsShot()
 {
-    return startPosition;
+    isActive = true;
+    speed = 10.0f;
 }
+
 
 SDL_Rect clsShot::getRect()
 {
@@ -35,6 +39,66 @@ SDL_Rect clsShot::getRect()
     rect.h = (int)height;
 
     return rect;
+}
+
+bool clsShot::IsActive()
+{
+    return isActive;
+}
+
+void clsShot::setActivity(bool active)
+{
+    isActive = active;
+}
+
+float clsShot::getWidth()
+{
+    return width;
+}
+
+float clsShot::getHeight()
+{
+    return height;
+}
+
+clsVector clsShot::getStartPosition()
+{
+    return startPosition;
+}
+
+clsVector clsShot::getTargetPosition()
+{
+    return targetPosition;
+}
+
+SDL_Texture *clsShot::getTexture()
+{
+    return texture;
+}
+
+void clsShot::setWidth(float w)
+{
+    width = w;
+}
+
+void clsShot::setHeight(float h)
+{
+    height = h;
+}
+
+void clsShot::setStartPosition(clsVector pos)
+{
+    startPosition = pos;
+}
+
+void clsShot::setTargetPosition(clsVector pos)
+{
+    targetPosition = pos;
+}
+
+void clsShot::setTexture(SDL_Texture *tex)
+{
+    texture = tex;
 }
 
 void clsShot::update()

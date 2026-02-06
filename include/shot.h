@@ -18,11 +18,29 @@ private:
     SDL_Texture *texture;
     float speed;
     clsVector velocity;
+    bool isActive;
 
 public:
     clsShot(clsVector sPos, clsVector tPos, float w, float h, SDL_Texture *tex);
-    clsVector getPos();
+    clsShot();
     SDL_Rect getRect();
+    bool IsActive();
+    void setActivity(bool active);
+
+    // Getters
+    float getWidth();
+    float getHeight();
+    clsVector getStartPosition();
+    clsVector getTargetPosition();
+    SDL_Texture *getTexture();
+
+    // Setters
+    void setWidth(float w);
+    void setHeight(float h);
+    void setStartPosition(clsVector pos);
+    void setTargetPosition(clsVector pos);
+    void setTexture(SDL_Texture *tex);
+
     void update();
     void render(SDL_Renderer *renderer);
 };

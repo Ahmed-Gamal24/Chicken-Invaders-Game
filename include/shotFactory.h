@@ -14,14 +14,16 @@ class clsShotFactory
 private:
     SDL_Renderer *renderer;
     SDL_Texture *shotTex;
-    list<clsShot *> allShots;
+
+    static const int maxShots = 200;
+    clsShot allShots[maxShots];
 
     Uint32 lastShotTime;
     Uint32 shotDelay;
 
 public:
     clsShotFactory(SDL_Renderer *renderer);
-    list<clsShot *> &shots();
+    clsShot* shots();
     void update();
     void produceShot(float mouseX, float mouseY);
     void render();

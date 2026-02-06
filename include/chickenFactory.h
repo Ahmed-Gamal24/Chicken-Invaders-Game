@@ -5,7 +5,7 @@
 #include "chicken.h"
 #include "vector.h"
 #include <cstdlib>
-#include <list>
+
 using namespace std;
 
 class clsChickenFactory
@@ -13,11 +13,14 @@ class clsChickenFactory
 private:
     static int chickenCount;
     bool isThereNewCheckin;
-    clsChicken *lastChicken;
+
     clsVector nextPos;
     SDL_Texture *chickenTex;
     SDL_Renderer *renderer;
-    list<clsChicken *> allChickens;
+
+    static const int maxChickens = 7;
+    clsChicken allChickens[maxChickens];
+    
     int killsNumber;
 
     int minX;
@@ -27,7 +30,8 @@ private:
 
 public:
     clsChickenFactory(SDL_Renderer *renderer);
-    list<clsChicken *> &chickens();
+    clsChickenFactory();
+    clsChicken* chickens();
     static int getChickenCount();
     static void setChickenCount(int newCount);
     int getKillsNum();

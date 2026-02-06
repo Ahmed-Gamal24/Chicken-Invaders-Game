@@ -2,6 +2,10 @@
 
 int clsChickenFactory::chickenCount = 0;
 
+clsChickenFactory::clsChickenFactory(){
+
+}
+
 clsChickenFactory::clsChickenFactory(SDL_Renderer *renderer)
 {
     isThereNewCheckin = false;
@@ -16,7 +20,7 @@ clsChickenFactory::clsChickenFactory(SDL_Renderer *renderer)
     chickenTex = IMG_LoadTexture(renderer, "img/chicken.png");
 }
 
-list<clsChicken *> &clsChickenFactory::chickens()
+clsChicken* clsChickenFactory::chickens()
 {
     return allChickens;
 }
@@ -56,8 +60,13 @@ void clsChickenFactory::produceChicken()
     int randomY = minY + (rand() % (maxY - minY + 1));
     nextPos.setX(randomX);
     nextPos.setY(randomY);
-    clsChicken *chicken = new clsChicken(nextPos, 100, 100, chickenTex);
-    allChickens.push_back(chicken);
+    
+    for(int i = 0; i < maxChickens; ++i){
+        if(! allChickens[i].getIsAlive()){
+            allChickens[i].setIsAlive(true);
+            allChickens[i].setPosition(nextPos);
+        }
+    }
 }
 
 void clsChickenFactory::render()
