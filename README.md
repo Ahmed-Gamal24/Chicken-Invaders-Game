@@ -4,6 +4,8 @@ A high-performance 2D arcade shooter built from scratch using **C++** and **SDL2
 
 ## 🎮 Gameplay Demo
 
+https://github.com/user-attachments/assets/a5cd4e19-e779-4231-b0d6-045fdfaa5936
+
 
 
 ## 🕹️ Controls
