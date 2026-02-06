@@ -53,14 +53,7 @@ The project follows the standard C++ convention of separating interface from imp
 
 ---
 
-## � Recent Improvements & Refactoring
-
-### Code Organization (v2.0)
-* **Header/Source Separation**: Refactored all classes to use separate `.h` and `.cpp` files, improving compilation efficiency and code maintainability.
-* **Directory Structure**: Organized files into logical directories:
-  - All headers in `include/`
-  - All implementations in `src/`
-* **Makefile Optimization**: Updated build system with automatic dependency tracking and proper object file management.
+## � Recent Improvements
 
 ### Memory & Performance Optimization
 * **Object Pooling Implementation**: Replaced dynamic `std::list` with fixed-size arrays to achieve:
@@ -68,20 +61,6 @@ The project follows the standard C++ convention of separating interface from imp
   - Improved CPU cache locality
   - Predictable, constant memory usage
   - Eliminated allocation/deallocation overhead per shot/chicken
-  
-* **Proper Constructor Initialization**: Fixed default constructors for pooled objects to prevent undefined behavior:
-  - All pointers initialized to `nullptr`
-  - All numeric values properly initialized
-  - All boolean flags set to appropriate defaults
-
-### API Enhancements
-* **Trajectory Calculation**: Added `calculateTrajectory()` method to `clsShot` for dynamic recomputation of angle and velocity when targeting changes.
-* **Activity Management**: Implemented proper state management with `setActivity(bool)` for shots and `setIsAlive(bool)` for chickens.
-* **Smart Pooling Logic**: 
-  - Only one object allocated per production call (added `break` statements)
-  - Checks for object availability before reactivation
-  - Efficient collision detection only for active entities
-
 ---
 
 ### Prerequisites
