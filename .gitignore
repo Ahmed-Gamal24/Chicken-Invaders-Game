@@ -1,0 +1,8 @@
+# Compiled binaries
+chicken_invaders
+
+# Object files
+*.o
+
+# VS Code folders
+.vscode/
