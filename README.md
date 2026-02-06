@@ -20,24 +20,69 @@ Designed for an intuitive, mouse-driven arcade experience:
 
 ### 🏛️ Architecture & Design Patterns
 * **Factory Method Pattern**: Utilized `clsChickenFactory` and `clsShotFactory` to encapsulate object creation. This decouples the game loop from entity instantiation, allowing for scalable waves of enemies.
+* **Object Pool Pattern**: Implemented fixed-size arrays for shots (200 max) and chickens (7 max) to eliminate memory fragmentation and improve cache locality. Objects are reused by toggling `isActive`/`isAlive` flags rather than allocating/deallocating.
 * **Manager Pattern**: The `clsGameField` acts as the central engine, coordinating physics updates, collision detection, and the rendering subsystem.
 * **Game Loop & Timing**: Implemented `SDL_GetTicks()` to manage frame-independent logic, ensuring consistent fire rates and smooth entity updates regardless of CPU speed.
 
+### 📁 Project Structure
+* **include/** - Header files (.h) containing class declarations and interfaces
+* **src/** - Implementation files (.cpp) with method definitions and game logic
+* **Makefile** - Automated build system with dependency management and proper compilation flags
+
+The project follows the standard C++ convention of separating interface from implementation, improving code organization and compilation efficiency.
+
 ### 📐 Physics & Math
-* **Vector-Based Movement**: A custom `clsVector` class serves as the mathematical foundation for all position and velocity updates.
-* **Trigonometric Trajectories**: Projectile paths are calculated using `atan2`, `sin`, and `cos` to map mouse coordinates to precise firing vectors.
-* **AABB Collision Detection**: Implemented Axis-Aligned Bounding Box (AABB) checks via `SDL_HasIntersection` for efficient $O(n \times m)$ hit detection.
-
-
+* **Vector-Based Movement**: A custom `clsVector` class serves as the mathematical foundation for all position and velocity calculations.
+* **Trigonometric Trajectories**: Projectile paths are calculated using `atan2`, `sin`, and `cos` to map mouse coordinates to precise firing vectors. The `calculateTrajectory()` method dynamically updates shot angles when retargeted.
+* **AABB Collision Detection**: Implemented Axis-Aligned Bounding Box (AABB) checks via `SDL_HasIntersection` for efficient collision detection.
 
 ### 💾 Data Structures & Memory Management
-* **Node-Based Entity Management**: Built using `std::list<T*>` to ensure $O(1)$ complexity for frequent insertions and deletions. This approach avoids the "shifting" overhead of contiguous arrays, making it ideal for high-speed arcade shooters.
-* **Fragmentation Resistance**: By utilizing a linked list, the game maintains stable performance during intense gameplay by avoiding memory fragmentation and reallocations common in dynamic arrays.
-* **Manual Lifecycle Control**: Carefully managed heap-allocated objects through a list of pointers. This allows for polymorphic behavior (supporting different chicken types) while ensuring manual memory cleanup to prevent leaks.
+* **Fixed-Size Object Pools**: 
+  - `clsShot allShots[200]` - Pre-allocated shot objects
+  - `clsChicken allChickens[7]` - Pre-allocated chicken objects
+  - Objects are reused during gameplay, avoiding memory allocation/deallocation overhead
+  
+* **Fragmentation Prevention**: By using fixed-size arrays instead of dynamic allocations, the game maintains stable performance without memory fragmentation buildup during gameplay.
+
+* **Encapsulation & Accessors**: Comprehensive getter and setter methods for all critical properties:
+  - **clsShot**: width, height, startPosition, targetPosition, texture, isActive
+  - **clsChicken**: width, height, position, texture, isAlive
+  - **clsShotFactory & clsChickenFactory**: maxShots, maxChickens (static properties)
+
+* **Proper Initialization**: Default constructors properly initialize all pooled objects to prevent undefined behavior with uninitialized pointers and values.
 
 ---
 
-## 🚀 Getting Started
+## � Recent Improvements & Refactoring
+
+### Code Organization (v2.0)
+* **Header/Source Separation**: Refactored all classes to use separate `.h` and `.cpp` files, improving compilation efficiency and code maintainability.
+* **Directory Structure**: Organized files into logical directories:
+  - All headers in `include/`
+  - All implementations in `src/`
+* **Makefile Optimization**: Updated build system with automatic dependency tracking and proper object file management.
+
+### Memory & Performance Optimization
+* **Object Pooling Implementation**: Replaced dynamic `std::list` with fixed-size arrays to achieve:
+  - Zero memory fragmentation during gameplay
+  - Improved CPU cache locality
+  - Predictable, constant memory usage
+  - Eliminated allocation/deallocation overhead per shot/chicken
+  
+* **Proper Constructor Initialization**: Fixed default constructors for pooled objects to prevent undefined behavior:
+  - All pointers initialized to `nullptr`
+  - All numeric values properly initialized
+  - All boolean flags set to appropriate defaults
+
+### API Enhancements
+* **Trajectory Calculation**: Added `calculateTrajectory()` method to `clsShot` for dynamic recomputation of angle and velocity when targeting changes.
+* **Activity Management**: Implemented proper state management with `setActivity(bool)` for shots and `setIsAlive(bool)` for chickens.
+* **Smart Pooling Logic**: 
+  - Only one object allocated per production call (added `break` statements)
+  - Checks for object availability before reactivation
+  - Efficient collision detection only for active entities
+
+---
 
 ### Prerequisites
 Ensure you have the SDL2 development libraries installed on your Ubuntu/Linux system:
